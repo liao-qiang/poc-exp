@@ -4,3 +4,5 @@
 -url xxx.xxx.xxx
 -attack xxx.xx.xxx
 -h 帮助
+
+注意 attack 会直接上传webshell 
